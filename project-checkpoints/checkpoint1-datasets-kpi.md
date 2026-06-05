@@ -7,7 +7,9 @@ We focus on book awards which rely on votes from the fanbase, which are a proxy 
 
 
 ### Stakeholders:
-…
+- Authors: Predicting which factors influence award nomination and selection can inform decision making during the writing process. 
+- Editors: Understanding which factors can influence editorial suggestions and the manuscript selection process.
+- Publishers: Modeling the probability of award nomination and selection can inform decisions on marketing allocation and publication decisions.
 
 ### Scope: 
 We focus on novels eligible to the following awards:
