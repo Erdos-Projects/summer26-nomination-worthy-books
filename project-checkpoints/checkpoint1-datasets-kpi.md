@@ -38,6 +38,7 @@ We focus on novels eligible to the following awards:
 - I initially had thought of using Goodreads or TheStorygraph and web scraping their public ratings and review counts for books, as a metric for popularity. However both are explicitly against such use, so we can't really do this ethically. At least OpenLibrary's ratings are accessible, but there are fewer of them. 
     - Some Goodreads book datasets exist on Kaggle but they are not comprehensive, I think?
 - In terms of doing some sort of sentiment analysis to capture the "buzz"/"popularity" of books, is it possible to use some other social media sources that do allow their data to be used for non-commercial ML training use? Perhaps Reddit's fantasy subdreddit? Or SFF magazines?
+- Perhaps we can use Google Trends data to determine what's popular? One can download trend data for specific terms directly as a CSV. There is also an alpha for their Google Trends API that we can apply to: https://developers.google.com/search/apis/trends
 
 ### Acquisition strategy
 - OpenLibrary: their latest bulk download (dated May 31) https://openlibrary.org/developers/dumps
