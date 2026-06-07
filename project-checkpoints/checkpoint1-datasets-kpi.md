@@ -30,9 +30,10 @@ We focus on novels eligible to the following awards:
 -
 ## Data Gathering
 ### Source Identification
+- ISFDB: bulk download of SQL backup (https://www.isfdb.org/, requires free account)
+    - A community-led database of speculative fiction novels. Includes book metadata.
 - OpenLibrary: bulk downloads (https://openlibrary.org/developers/dumps)
     - Includes: book metadata, book description, user star ratings, “subjects”/topics 
-    - Fairly straightforward to use SQL or such to filter the books to get a dataset of fantasy novel nominees for each given year, I think.
 - Possibly Wikidata? For more author data?
 - Similarly, Google Books also contains book descriptions and metadata, to fill in anything that is missing. (https://developers.google.com/books) 
 - I initially had thought of using Goodreads or TheStorygraph and web scraping their public ratings and review counts for books, as a metric for popularity. However both are explicitly against such use, so we can't really do this ethically. At least OpenLibrary's ratings are accessible, but there are fewer of them. 
