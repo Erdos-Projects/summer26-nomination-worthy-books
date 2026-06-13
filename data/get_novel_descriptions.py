@@ -3,9 +3,10 @@ import json
 import csv
 import pandas as pd
 import time
+import hardcover_config
 
 API_URL = "https://api.hardcover.app/v1/graphql"
-TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJIYXJkY292ZXIiLCJ2ZXJzaW9uIjoiOCIsImp0aSI6IjExYWJlZWY2LWY3MTAtNGYxZi05ZGU4LTdjNmNmYjkwNmMzZSIsImFwcGxpY2F0aW9uSWQiOjIsInN1YiI6IjExMjQ5MCIsImF1ZCI6IjEiLCJpZCI6IjExMjQ5MCIsImxvZ2dlZEluIjp0cnVlLCJpYXQiOjE3ODExODk3NDQsImV4cCI6MTgxMjcyNTc0NCwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInVzZXIiXSwieC1oYXN1cmEtZGVmYXVsdC1yb2xlIjoidXNlciIsIngtaGFzdXJhLXJvbGUiOiJ1c2VyIiwiWC1oYXN1cmEtdXNlci1pZCI6IjExMjQ5MCJ9LCJ1c2VyIjp7ImlkIjoxMTI0OTB9fQ.ue8KyvQgRy3uPrQMKfy5qeIFfb1zRGHfkl8ImhCQO-w"
+TOKEN = hardcover_config.hardcover_api
 batch_size = 50 # request 50 books per query
 lag = 1.5 # one request every 1.5 seconds
 
