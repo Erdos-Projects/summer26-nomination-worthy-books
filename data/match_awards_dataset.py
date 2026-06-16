@@ -8,7 +8,7 @@ locus.head()
 hugo = pd.read_csv('hugo_nominees.csv')
 hugo.head()
 
-books = pd.read_csv('isfdb-hardcover-combinedv2.csv')
+books = pd.read_csv('isfdb-hardcover-combined-v2.csv')
 
 hugo.title = hugo.title.apply(lambda x : x.lstrip('“').rstrip('”'))
 locus.title = locus.title.apply(lambda x : x.strip('“').strip('”'))
@@ -20,30 +20,30 @@ missing_books = "missing_books.csv"
 
 cols = ["title", "author"]
 
-with open(missing_books, 'a') as output:
+with open(missing_books, 'w') as output:
     writer = csv.writer(output, delimiter='\t')
     writer.writerow(cols)
-    # for title in hugo.title:
-    #     if len(books.loc[books.title == title]) == 0:
-    #         authors = hugo[hugo.title == title].author.iloc[0].split('&')
-    #         for author in authors:
-    #             question = [
-    #                 inquirer.List('titles',
-    #                 message="What book matches input ({} by {})?".format(title, author),
-    #                 choices=books['title'][books['author'].str.contains(author)].tolist()  + ['None'],
-    #             ),
-    #             ]
-    #             answer = inquirer.prompt(question)['titles']
-    #             if answer == 'None':
-    #                 print("This book is missing from database. Adding it to missing books.")
-    #                 writer.writerow([title, author])
-    #             else:
-    #                 print("Match found!")
-    #                 matched_title = answer
-    #                 # replace title and author in isfdb dataset to match award
-    #                 mask = (books.title == matched_title) & (books['author'].str.contains(author))
-    #                 books.loc[mask, 'title'] = title
-    #                 books.loc[mask, 'author'] = author
+    for title in hugo.title:
+        if len(books.loc[books.title == title]) == 0:
+            authors = hugo[hugo.title == title].author.iloc[0].split('&')
+            for author in authors:
+                question = [
+                    inquirer.List('titles',
+                    message="What book matches input ({} by {})?".format(title, author),
+                    choices=books['title'][books['author'].str.contains(author)].tolist()  + ['None'],
+                ),
+                ]
+                answer = inquirer.prompt(question)['titles']
+                if answer == 'None':
+                    print("This book is missing from database. Adding it to missing books.")
+                    writer.writerow([title, author])
+                else:
+                    print("Match found!")
+                    matched_title = answer
+                    # replace title and author in isfdb dataset to match award
+                    mask = (books.title == matched_title) & (books['author'].str.contains(author))
+                    books.loc[mask, 'title'] = title
+                    books.loc[mask, 'author'] = author
     for title in locus.title:
         if len(books.loc[books.title == title]) == 0:
             authors = locus[locus.title == title].author.iloc[0].split('&')
