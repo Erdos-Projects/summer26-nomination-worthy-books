@@ -55,6 +55,4 @@ AND YEAR(pubs.pub_year) > 1953 -- remove books before first award year
 AND YEAR(pubs.pub_year) < 2026
 AND languages.lang_name = 'English' -- avoid translations etc
 AND titles.title_parent = 0 -- only take the primary title (eliminate when same book is published under separate titles: e.g. "The Hobbit" vs "The Hobbit, or There and Back Again")
-AND titles.title_jvn = 'No' -- remove juvenile fiction
-GROUP BY titles.title_id, titles.title_title, titles.title_ttype, authors.author_canonical, languages.lang_name, title_tags.tags, authors.author_birthplace, authors.author_birthdate
-HAVING isbn IS NOT NULL -- only save books with isbns;
+GROUP BY titles.title_id, titles.title_title, titles.title_ttype, authors.author_canonical, languages.lang_name, title_tags.tags, authors.author_birthplace, authors.author_birthdate;
