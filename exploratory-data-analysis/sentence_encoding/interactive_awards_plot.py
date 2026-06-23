@@ -16,7 +16,7 @@ def main():
 
 
     print('reading dataset...')
-    books = pd.read_csv(str(BASE_DIR) + '/../data/final_book_dataset_cleaned.csv', sep = '\t',
+    books = pd.read_csv(str(BASE_DIR) + '/../../data/final_book_dataset_cleaned.csv', sep = '\t',
         dtype={
             'author_birthyear' : 'Int64',
             'title_id' : 'Int64',
