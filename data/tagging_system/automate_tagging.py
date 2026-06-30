@@ -545,6 +545,7 @@ def load_tags():
 
     return np.array(tags)
 
+
 def load_transformer():
     '''
     Load the locally saved transformer and returns it
@@ -570,12 +571,23 @@ def encode_tags():
 
     return transformer.encode(tags)
 
+def tag_dictionary():
+    '''
+    Returns the dictionary of mapping between the actual tag name and its embedded vector
+    '''
+    tags = load_tags()
+    tags_encoded = encode_tags()
+
+    return {tags[i] : tags_encoded[i] for i in range(len(tags))} # already checked that this is correct upto some floating point errors
+
+
 def encode_books(books : pd.DataFrame, transformer : SentenceTransformer) -> pd.DataFrame:
     '''
     Input:
         books: DataFrame containing all the book data.
                In particular, books should contain a column called
                book_synopsis
+        transformer: Magical transformer that takes in texts and spits out a vector
     Returns:
         books with all the synopsis encoded by the transformer
     '''
@@ -593,3 +605,31 @@ def encode_books(books : pd.DataFrame, transformer : SentenceTransformer) -> pd.
 
     return books
 
+def tag_description(encoded_description : np.ndarray, transformer, encoded_tags) -> np.ndarray:
+    '''
+    Input:
+        encoded_description: Vector of the book synopsis/description encoded by the transformer
+        transformer: Load this in for performance reasons
+        encoded_tags: Loaded for performance reasons
+    Output:
+        Array of similarities to the book description with the tags
+    '''
+    
+    return transformer.similarity(encoded_description, encoded_tags)[0].numpy()
+
+
+def tag_books(books : pd.DataFrame, transformer : SentenceTransformer, tags_encoded : np.ndarray) -> pd.DataFrame():
+    """
+    Inputs:
+        books: DataFrame with books with already encoded synopses
+        transformer: included for performance and modularity purposes
+        tags_encoded: included for performance and modularity purposes
+
+    Returns:
+        books with a new column called auto_tags which contains the similarity between 
+        the booksynopsis and encoded tags 
+    """
+
+    books['auto_tags'] = books.encoded_synopsis.apply(lambda x : tag_description(x, transformer, tags_encoded))
+
+    return books
