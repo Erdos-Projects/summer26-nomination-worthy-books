@@ -33,11 +33,11 @@ def main():
     fda_locus = FDataGrid(locus_embed)
     fda_nonlocus = FDataGrid(nonlocus_embed)
 
-    t2, p = hotelling_test_ind(fda_locus, fda_nonlocus, n_reps = 100_000)
+    t2, p = hotelling_test_ind(fda_locus, fda_nonlocus, n_reps = 1_000_000)
     
     with open('locus_t2.txt', 'w') as file:
         file.write("Locus Hotelling T^2 hypothesis testing\n")
-        file.write("Permutation testing with 100,000 repetitions\n")
+        file.write("Permutation testing with 1,000,000 repetitions\n")
         file.write('T^2 statistic: {}\n'.format(str(t2)))
         file.write('p value: {}\n'.format(p))
 
