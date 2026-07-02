@@ -553,7 +553,7 @@ def load_transformer():
     BASE_DIR = Path(__file__).resolve().parent
     BASE_DIR = str(BASE_DIR)
 
-    file = open(BASE_DIR + '/../../exploratory-data-analysis/sentence_encoding/transformer.pkl', 'rb')
+    file = open(BASE_DIR + '/../exploratory-data-analysis/sentence_encoding/transformer.pkl', 'rb')
 
     transformer = pickle.load(file)
 
