@@ -1,86 +1,6 @@
-# %%
-import numpy as np
-import csv
-import pandas as pd
-from itertools import islice
-import json
-import matplotlib.pyplot as plt
-
-from pathlib import Path
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parents[1]
-
-dataset_file = REPO_ROOT / 'data' / 'final_book_dataset_cleaned.csv'
-
-
-# %%
-books = pd.read_csv(dataset_file, sep = '\t',
-        dtype={
-            'author_birthyear' : 'Int64',
-            'title_id' : 'Int64',
-            'isbn' : 'str'
-        }
-    )
-
-# %%
-books.head(5)
-
-# %%
-## add month of publication column, 00 means only year is known
-books['month_of_publication'] =books['release_date'].str[5:7].str.replace('00','Unknown')
-books.sample(50)
-
-# %%
-## Add age of author at publication
-books['Author_Age_at_Publication'] = 'Unknown'
-books['Author_Age_at_Publication'] = books['Author_Age_at_Publication'].case_when([(books['author_birthyear'].isna() == False,books['release_year'] - books['author_birthyear'])])
-
-# %%
-books.sample(15)
-
-# %%
-## Add column with number of hugo or locus awards won prior to that date
-books['Hugo_Awards_Previously']= books.groupby(['author'])['hugo'].cumsum()
-books['Locus_Awards_Previously']= books.groupby(['author'])['locus'].cumsum()
-
-# %%
-# display(books[books['author'] == 'Ada Palmer'])
-#From the above example we see that .cumsum method counts the current row as well and is causing leakage.
-
-# %%
-##Once you run this cell the above bug will be fixed.
-
-## Add column with number of hugo or locus awards won prior to that date
-## We do this to ensure that hugo info about current year is not included
-# cumsum includes the current year as well
-
-books['Hugo_Awards_Previously'] = (
-    books.groupby('author')['hugo'].cumsum() - books['hugo']
-)
-books['Locus_Awards_Previously'] = (
-    books.groupby('author')['locus'].cumsum() - books['locus']
-)
-
-# %%
-# display(books[books['author'] == 'Ada Palmer'])
-#bug fixed
-
-# %%
-books.sample(15)
-
-# %%
-## Add column with boolean if author been nominated for Hugo/Locus prior to that date
-books['Hugo_Nominee_Before'] = 'False'
-books['Hugo_Nominee_Before'] = books['Hugo_Nominee_Before'].case_when([(books['Hugo_Awards_Previously'] > 0,True)])
-books['Locus_Nominee_Before'] = 'False'
-books['Locus_Nominee_Before'] = books['Locus_Nominee_Before'].case_when([(books['Locus_Awards_Previously'] > 0,True)])
-
-# %%
-books.sample(100)
-
-# %%
 ## Add Author Birthplace by country
+import pandas as pd
+
 replace_dict = {'Austria':['Austria-Hungary','Austro-Hungarian Empire','Austria'],
                'Russia':['Russian Empire','Russia','USSR','Soviet'],
                'Germany':['German Empire','Reich','Confederation','Germany','Prussia'],
@@ -143,10 +63,6 @@ def replace_author_birthplace_country(x):
 
 
 # %%
-books = books.assign(author_birthplace_country=books['author_birthplace'].apply(replace_author_birthplace_country))
-books.sample(15)
-
-# %%
 ## Author Birthplace by continent
 continent_dict = {
 'Africa' : ['Africa','Zambia','Libya','Sudan','Ethiopia','Madagascar','Morocco','Sudan','Namibia','Niger','Botswana','Liberia','Tunisia','Mauritius',
@@ -175,16 +91,6 @@ def replace_author_birthplace_continent(x):
     return x
 
 # %%
-books = books.assign(author_birthplace_continent=books['author_birthplace'].apply(replace_author_birthplace_continent))
-books.sample(15)
-
-# %%
-books.reset_index()
-
-
-output_file = REPO_ROOT / 'data' / 'data_with_author_and_awards.csv'
-
-books.to_csv(output_file, index = False)
 
 
 # %%
