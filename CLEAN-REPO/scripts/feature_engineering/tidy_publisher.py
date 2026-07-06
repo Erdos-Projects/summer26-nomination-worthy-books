@@ -8,6 +8,10 @@ import missingno as msno
 import matplotlib.pyplot as plt
 import string
 
+# %%
+# books = pd.read_csv('../data/final_book_dataset.csv', delimiter='\t')
+
+# %%
 def clean_publishers(publisher):
     # "/" separates an imprint/collection from its parent company, keep only imprint/collection:
     pub = str(publisher).split("/")[0].strip()
@@ -44,3 +48,17 @@ def combine_publishers(pubcolumn, limitnum = 1):
 def publisher_tidy(pubcolumn):
     pubcolumn = pubcolumn.apply(clean_publishers)
     return combine_publishers(pubcolumn)
+
+# %%
+# books['clean_publisher'] = combine_publishers(books['clean_publisher'])
+
+# %%
+# books['clean_publisher'].value_counts(normalize=True)
+
+# %%
+# books['clean_publisher'][books['hugo']].value_counts(normalize=True)
+
+# %%
+
+
+
