@@ -1,7 +1,9 @@
+import numpy as np
 
 def walk_forward(data, initial_size=5, step=1):
     # data is a data
-    years = data['release_year'].unique()
+    years = np.sort(data['release_year'].unique())
+
     num_years = len(years)
     splits = []
 
