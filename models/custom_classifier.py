@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import FunctionTransformer
 from sklearn.linear_model import LogisticRegression
 
 class CustomClassifier:
@@ -25,24 +22,9 @@ class CustomClassifier:
         # we first do a KNeighborsClassifier on our data's encoded_synopses,
         # then we do a logistic regression with the result and num_prev_awards
 
-        #print(X)
-        #print(X['encoded_synopsis'])
-
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
 
         self.knn.fit(X_synopsis, y)
-
-        '''
-        self.log_step = Pipeline([
-            ('knn step', ColumnTransformer([
-                ('pass', 'passthrough', ['num_prev_awards']),
-                ('knn step', FunctionTransformer(
-                    lambda x : self.knn.predict(x.explode().values.astype(float).reshape(-1, 384))
-                ), 'encoded_synopsis')
-            ],
-            remainder='drop')),
-            ('log_reg', LogisticRegression(class_weight = 'balanced'))
-        ])'''
 
         X['knn_pred'] = self.knn.predict(X_synopsis)
 
@@ -59,12 +41,52 @@ class CustomClassifier:
         Output:
         '''
 
-
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
         X['knn_pred'] = self.knn.predict(X_synopsis)
-
 
         return self.log_step.predict(X[['knn_pred', 'num_prev_awards']])
         
 
 
+
+class CustomBaggingClassifier:
+    def __init__(self, base_estimator = CustomClassifier, n_estimators = 10, kwargs = {}):
+        '''
+        (Mostly) copied from the ensemble_i problem session
+        Parameters:
+            base_estimator: Our CustomClassifier class
+            n_estimators: Number of estimators in the ensemble
+            kwargs: A dictionary of keyword arguments to pass to our base_estimator
+        Attributes:
+            self.estimators: A list of instantiated base estimators
+        '''
+
+        self.kwargs = kwargs
+        self.n_estimators = n_estimators
+        self.estimators = [base_estimator(**kwargs) for _ in range(n_estimators)]
+    
+    def fit(self, X, y):
+        '''
+        Inputs:
+            X: DataFrame that is specified with the same columns as taken in by our CustomClassifier
+            y: Target of Hugo | Locus award nominees
+        '''
+        rng = np.random.default_rng()
+        n_samples = X.shape[0]
+
+        for estimator in self.estimators:
+            indices = rng.choice(n_samples, n_samples, replace = True)
+            X_boot = X.iloc[indices]
+            y_boot = y.iloc[indices]
+
+            estimator.fit(X_boot, y_boot)
+        return
+    
+    def predict(self, X):
+        preds = np.array([estimator.predict(X) for estimator in self.estimators])
+        preds = preds.T
+        preds = np.array([
+            bool(np.argmax(np.bincount(preds[i]))) for i in range(len(preds))
+        ])
+
+        return preds
