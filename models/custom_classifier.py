@@ -3,12 +3,16 @@ import pandas as pd
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
 
 class CustomClassifier:
     def __init__(self, n_neighbors = 10, weights = 'distance', n_jobs = -1, class_weight = 'balanced'):
-        # these should really be private fields
+        self.class_weight = class_weight
+        # Attributes
         self.knn = KNeighborsClassifier(n_neighbors = n_neighbors, weights = weights, n_jobs = n_jobs)
-        self.log_step = LogisticRegression(class_weight= class_weight)
+        self.log_step = LogisticRegression(max_iter = 1000, class_weight=self.class_weight)
 
     def fit(self, X, y):
         '''
@@ -28,7 +32,22 @@ class CustomClassifier:
 
         X['knn_pred'] = self.knn.predict(X_synopsis)
 
-        self.log_step.fit(X[['knn_pred', 'num_prev_awards']], y)
+
+        self.log_step = Pipeline(
+            steps = [
+                ('encode birthplace and publisher', ColumnTransformer([
+                    #('passthrough', 'passthrough', ['knn_pred', 'num_prev_awards', 'Author_Age_at_Publication']),
+                    ('passthrough', 'passthrough', ['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'Author_Age_at_Publication']),
+                    ('encode', OneHotEncoder(handle_unknown='ignore'), ['first_publisher', 'author_birthplace_country'])
+                ])
+                ),
+                ('log_reg', LogisticRegression(max_iter = 1000, class_weight = self.class_weight))
+            ]
+        )    
+
+        #self.log_step.fit(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']], y)
+        self.log_step.fit(X[['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']], y)
+
         return
 
     def predict(self, X):
@@ -44,7 +63,9 @@ class CustomClassifier:
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
         X['knn_pred'] = self.knn.predict(X_synopsis)
 
-        return self.log_step.predict(X[['knn_pred', 'num_prev_awards']])
+        #return self.log_step.predict(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']])
+        return self.log_step.predict(X[['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']])
+         
         
 
 
@@ -83,6 +104,10 @@ class CustomBaggingClassifier:
         return
     
     def predict(self, X):
+        '''
+        Inputs:
+            X: Dataframe of books with encoded_synopsis and num_prev_awards columns
+        '''
         preds = np.array([estimator.predict(X) for estimator in self.estimators])
         preds = preds.T
         preds = np.array([
