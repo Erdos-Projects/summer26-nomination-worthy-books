@@ -6,9 +6,16 @@ import json
 import missingno as msno
 import matplotlib.pyplot as plt
 import sklearn
-from tidy_book_tags import *
-from tidy_publisher import *
-from add_author_award_info import *
+import sys
+
+from pathlib import Path
+
+SCRIPT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(SCRIPT_ROOT))
+
+from feature_engineering.tidy_book_tags import *
+from feature_engineering.tidy_publisher import *
+from feature_engineering.add_author_award_info import *
 
 from pathlib import Path
 
