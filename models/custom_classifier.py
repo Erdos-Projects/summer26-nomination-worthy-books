@@ -6,6 +6,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import FunctionTransformer
+from xgboost import XGBClassifier
+from sklearn.ensemble import BaggingClassifier
 
 class CustomClassifier:
     def __init__(self, n_neighbors = 10, weights = 'distance', n_jobs = -1, class_weight = 'balanced'):
@@ -36,17 +39,21 @@ class CustomClassifier:
         self.log_step = Pipeline(
             steps = [
                 ('encode birthplace and publisher', ColumnTransformer([
-                    #('passthrough', 'passthrough', ['knn_pred', 'num_prev_awards', 'Author_Age_at_Publication']),
-                    ('passthrough', 'passthrough', ['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'Author_Age_at_Publication']),
-                    ('encode', OneHotEncoder(handle_unknown='ignore'), ['first_publisher', 'author_birthplace_country'])
+                    ('passthrough', 'passthrough', ['knn_pred', 'num_prev_awards', 'Author_Age_at_Publication']),
+                    #('passthrough', 'passthrough', ['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'Author_Age_at_Publication']),
+                    ('encode', OneHotEncoder(handle_unknown='ignore'), ['first_publisher', 'author_birthplace_country']),
+                    ('tags', FunctionTransformer(lambda x : x.explode().values.astype(float).reshape(-1, 73)), 'auto_tags')
                 ])
                 ),
-                ('log_reg', LogisticRegression(max_iter = 1000, class_weight = self.class_weight))
+                
+                #('log_reg', LogisticRegression(max_iter = 1000, class_weight = self.class_weight))
+                ('xgb', XGBClassifier(n_estimators = 10, n_jobs = -1, objective='binary:logistic'))
+                
             ]
         )    
 
         #self.log_step.fit(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']], y)
-        self.log_step.fit(X[['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']], y)
+        self.log_step.fit(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication', 'auto_tags']], y)
 
         return
 
@@ -63,8 +70,8 @@ class CustomClassifier:
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
         X['knn_pred'] = self.knn.predict(X_synopsis)
 
-        #return self.log_step.predict(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']])
-        return self.log_step.predict(X[['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication']])
+        return self.log_step.predict(X[['knn_pred', 'num_prev_awards', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication', 'auto_tags']])
+        #return self.log_step.predict(X[['knn_pred', 'Hugo_Awards_Previously', 'Locus_Awards_Previously', 'first_publisher', 'author_birthplace_country', 'Author_Age_at_Publication', 'auto_tags']])
          
         
 
