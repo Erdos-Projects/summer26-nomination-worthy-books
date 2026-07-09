@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import string
 
 # need to download pattern and nltk libraries
-from pattern.en import singularize
+from pattern.text.en import singularize
 
 from nltk.stem import PorterStemmer
 stemmer = PorterStemmer()
