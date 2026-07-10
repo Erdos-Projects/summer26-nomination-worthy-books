@@ -1,7 +1,16 @@
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import FunctionTransformer
-from feature_engineering.feature_engineering import tag_dataframe
+from pathlib import Path
+
+DIR = Path(__file__).parent.resolve()
+DIR = str(DIR)
+
+import sys
+
+sys.path.append(DIR + '/../') # This should take us to the project parent folder
+
+from scripts.feature_engineering.feature_engineering import tag_dataframe
 from custom_yearly_scalers import YearByYearStandardScaler, YearlyGenreTagScaler, YearlyPastNomineeSimilarityScaler
 from sklearn.preprocessing import MultiLabelBinarizer, OneHotEncoder, StandardScaler, FunctionTransformer
 from sklearn.impute import SimpleImputer
@@ -9,6 +18,13 @@ from sklearn.impute import SimpleImputer
 from sklearn.neighbors import KNeighborsClassifier
 
 import xgboost as xgb
+
+
+def bool_to_int(x):
+    '''
+    Helper function to stop pickle from yelling at me
+    '''
+    return x.astype(int)
 
 '''
 This is a short and dirty class to get my custom xgb_ranker_with_synopsis model in one class
@@ -43,10 +59,11 @@ class SynopsisXGBRanker:
         # numerical features: z-score normalization with the rest of the year.
         # turn bool features to int
         # calculate similarities
+
         feature_preprocessing = ColumnTransformer(
             transformers=[
                 ('numerical_scaling', YearByYearStandardScaler(year_column='release_year', scale_columns=numerical_features), numerical_features + ['release_year']),
-                ('bool_to_int', FunctionTransformer(lambda x: x.astype(int), feature_names_out='one-to-one'), bool_features),
+                ('bool_to_int', FunctionTransformer(bool_to_int, feature_names_out='one-to-one'), bool_features),
                 ('onehot', categorical_pipeline, categorical_features),
             ('tag_similarity', YearlyGenreTagScaler(tag_columns=list(tag_dataframe.columns), year_column='release_year'), list(tag_dataframe.columns) + ['release_year']) ,
             ('nominee_,similarity', YearlyPastNomineeSimilarityScaler(tag_columns=list(tag_dataframe.columns), year_column='release_year'), list(tag_dataframe.columns) + ['release_year']),
@@ -76,19 +93,15 @@ class SynopsisXGBRanker:
     
     def fit(self, X, y):
         '''
-        X must have the everything in the features column except knn_pred. Instead it needs to have a column of
-        'encoded_synopsis'
+        X must have the everything in the features column except knn_pred. 
+        It must already have a column of 'encoded_synopsis'
         '''
-        #X = X.copy()
-        #y = y.copy()
 
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
 
         self.knn.fit(X_synopsis, y)
 
         X['knn_pred'] = self.knn.predict(X_synopsis)
-
-        #print(X.columns)
 
 
         self.model.fit(
@@ -103,7 +116,6 @@ class SynopsisXGBRanker:
         X must have everything in the features column except knn_pred. Instead it needs to have an 'encoded_synopsis'
         column.
         '''
-        #X = X.copy()
 
         X_synopsis = X['encoded_synopsis'].explode().values.astype(float).reshape(-1, 384)
 
