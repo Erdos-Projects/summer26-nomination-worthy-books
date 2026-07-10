@@ -116,3 +116,7 @@ class YearlyPastNomineeSimilarityScaler(BaseEstimator, TransformerMixin):
         # CONCRETELY: This step drops all tag columns and the year column, 
         # and outputs EXACTLY one brand new column name.
         return np.array(['past_winner_similarity'], dtype=object)
+
+
+def bool_to_integer(x):
+    return x.astype(int)
