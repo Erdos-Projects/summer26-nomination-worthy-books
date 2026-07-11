@@ -84,7 +84,7 @@ def main():
 
     ax.scatter(award3d[0], award3d[1], award3d[2], color='orange', alpha=1.0)
 
-    ax.scatter(nonaward3d[0], nonaward3d[1], nonaward3d[2], color='blue', alpha=0.01)
+    ax.scatter(nonaward3d[0], nonaward3d[1], nonaward3d[2], color='blue', alpha=0.02)
 
     plt.show()
     return
