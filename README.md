@@ -107,6 +107,10 @@ We also present the confusion matrices of the following situations below:
 
 From these confusion matrices, we see that the LearnToRank models have the lowest false positive count compared to baseline, while the SynopsisXGBRanker model has a higher true positive rate, but is balanced out by more false positives. 
 
+Finally, we present the metrics specific to the LearnToRank models.
+
+<img src='graphics/ranker_comp.png' width=500>
+
 Comparing the importance of the features in the Learn to Rank models, we notice that author past nomination features are generally most important, followed by past-nominee-similarity and cohort-similarity. In the SynopsisXGBRank model, the result of the KNN prediction step dominates the feature importance.
 
 We have large year-by-year variance in our metrics. This could be due to changing trends within genre conventions, publisher landscape, and fan engagement methods, or due to the inherent sparsity of nominated books causing predictions to be inherently chaotic. 

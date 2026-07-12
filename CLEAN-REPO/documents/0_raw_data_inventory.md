@@ -1,4 +1,4 @@
-# Raw Data Inventory
+k# Raw Data Inventory
 
 ### List of data sources
 
@@ -11,9 +11,9 @@
 
 ### List of raw data files
 
-| File name                           | Source                            | Description                                                                                                                                                                                                                         |
-| -------------------------------------| -----------------------------------| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `isfdb_novels_06-06_with-null-isbn` | ISFDB data dump from June 6 2026. | Extracted from data dump using `scripts/data_gathering/isfdb_get_novel_details.sql`. Contains details of all first editions of all English-language SFF novels with known title, author name, ISBN, publisher and publication date. |
-| `hardcover_bookdetails.csv`         | Hardcover API, June 11 2026.      | Descriptions and user-created tags for books in `isfdb_novels_06-06.csv` which were available in Hardcover. Use ISBN to match this to novels in `isfdb_novels_06-06.csv`. Note: delimiter is "\t".                                  |
-| `hugo_nominees.csv`                 | SFADB, June 11 2026.              | Lists all novels who were finalists of Hugo Award for Best Novel since its inception in 1954. Contains title, author, and publication date for each.                                                                                |
-| `locus_nominees.csv`                | SFADB, June 11 2026.              | Lists all novels who were finalists of Locus Award for Best Novel, Locus Award for Best SF Novel, and Locus Award for Best Fantasy Novel since their inception in 1971. Contains title, author, and publication date for each.      |
+| File name                                | Source                            | Description                                                                                                                                                                                                                         |
+| ------------------------------------------| -----------------------------------| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `data/isfdb_novels_06-06_with-null-isbn` | ISFDB data dump from June 6 2026. | Extracted from data dump using `scripts/data_gathering/isfdb_get_novel_details.sql`. Contains details of all first editions of all English-language SFF novels with known title, author name, ISBN, publisher and publication date. |
+| `data/hardcover_bookdetails.csv`         | Hardcover API, June 11 2026.      | Descriptions and user-created tags for books in `isfdb_novels_06-06.csv` which were available in Hardcover. Use ISBN to match this to novels in `isfdb_novels_06-06.csv`. Note: delimiter is "\t".                                  |
+| `data/hugo_nominees.csv`                 | SFADB, June 11 2026.              | Lists all novels who were finalists of Hugo Award for Best Novel since its inception in 1954. Contains title, author, and publication date for each.                                                                                |
+| `data/locus_nominees.csv`                     | SFADB, June 11 2026.              | Lists all novels who were finalists of Locus Award for Best Novel, Locus Award for Best SF Novel, and Locus Award for Best Fantasy Novel since their inception in 1971. Contains title, author, and publication date for each.      |
