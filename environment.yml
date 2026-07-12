@@ -31,3 +31,4 @@ dependencies:
       - sentence_transformer
       - lightgbm
       - pattern
+      - beautifulsoup4
