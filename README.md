@@ -21,6 +21,11 @@ conda install pattern
 ```
 conda install lightgbm
 ```
+- Scikit-FDA
+```
+pip install scikit-fda
+conda install scikit-fda
+```
 - others...
 
 ### Stakeholders and KPIs
