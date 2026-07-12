@@ -26,7 +26,18 @@ conda install lightgbm
 pip install scikit-fda
 conda install scikit-fda
 ```
-- others...
+- NLTK (Natural Language Toolkit)
+```
+pip install nltk
+conda install nltk
+```
+- BeautifulSoup
+```
+pip install beautifulsoup4
+conda install beautifulsoup4
+```
+
+The full list of packages and dependencies are further described in the ```environment.yml``` file.
 
 ### Stakeholders and KPIs
 Our main stakeholders are publishers, editors, authors, booksellers, libraries, SFF readers and award communities. These groups can use the project to identify promising new SFF novels, understand the factors linked to award nominations, and improve marketing decisions. 

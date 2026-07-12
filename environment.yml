@@ -32,3 +32,4 @@ dependencies:
       - lightgbm
       - pattern
       - beautifulsoup4
+      - nltk
