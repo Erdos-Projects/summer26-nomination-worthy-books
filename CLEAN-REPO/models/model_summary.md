@@ -10,7 +10,7 @@ All in all we've attempted the following:
 - Logistic regression
 - Logistic regression with automated tagging features
 - Logistic regression with encoded synopsis data
-- LightGBM ranker models
+- LightGBM ranker model
 - Various ensemble methods on the encoded synopsis data
 
 We will summarize the results of our model testing below.
@@ -47,4 +47,22 @@ We trained a logistic regression model as a more advanced baseline model to comp
 <img src="graphics/logreg_cv.png">
 
 ### Logistic regression with automated tagging features
-Using the same sentence transformer model that we used with 
+Using the same sentence transformer model that we used with the book synopses, we can encode the tags and take the similarity of the encoded synopses against the encoded tags to create an automated tagging system for our books. We can then plug the tag similarities into a logistic regression model. 
+
+However, doing a simple train/test split of our training set (books before 2006 and books from 2016--2014), we find that the logistics regression model with the auto-generated tags and number of previous awards by author features actually performed *worse* than the logistics regression model with just the number of previous awards as a features ($F_1$ scores of 0.396 vs 0.329). This justifies excluded the auto-generated tags as a feature.
+
+### Logistics regression with synopses
+In this model, we incorporated the encoded synopsis vectors as an additional feature into the logistics regression model. Here, we used a coarser walk-forward validaton (the testing was done before the year-by-year walkforward script was created), where we manually split the training data into 5 folds.
+- Fold 0: training years 1971--1977, validation years 1978--1979
+- Fold 1: training years 1971--1985, validation years 1986--1987
+- Fold 2: training years 1971--1993, validation years 1994--1995
+- Fold 3: training years 1971--2001, validation years 2002--2003
+- Fold 4: training years 1971--2011, valdiation years 2012--2014
+
+This model produced an average $F_1$ across folds of $0.19$, and the $F_1$ scores across folds is recorded in the following table, where the red dashed line indicates the average $F_1$ score.
+
+<img src="graphics/synopsislogreg_cv.png">
+
+We see here that the $F_1$ scores are not very high, which meant that we excluded this model from consideration.
+
+### LightGBM model
