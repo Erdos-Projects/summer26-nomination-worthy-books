@@ -1,4 +1,0 @@
-Hugo Hotelling T^2 hypothesis testing
-Permutation testing with 1,000,000 repetitions
-T^2 statistic: 535.0193956282445
-p value: 0.000167
