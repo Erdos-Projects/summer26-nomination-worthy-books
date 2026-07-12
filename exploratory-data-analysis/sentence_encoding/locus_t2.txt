@@ -1,4 +1,0 @@
-Locus Hotelling T^2 hypothesis testing
-Permutation testing with 1,000,000 repetitions
-T^2 statistic: 1051.8094132468555
-p value: 0.0

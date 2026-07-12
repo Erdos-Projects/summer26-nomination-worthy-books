@@ -7,15 +7,19 @@ This project aims to predict the future success of newly-released novels within 
 
 ### Dependencies
 This project relies on the following dependencies to run:
-- ```sentence_transformer```
+- Sentence Transformer
 ```
 pip install -U sentence_transformer
 conda install sentence_transformer
 ```
-- ```pattern```
+- Pattern
 ```
 pip install pattern
 conda install pattern
+```
+- LightGBM
+```
+conda install lightgbm
 ```
 - others...
 
