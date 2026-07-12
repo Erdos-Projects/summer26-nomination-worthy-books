@@ -86,6 +86,7 @@ These methods were tested using a simple train/test split of our training set (b
 - 'GradBoost': 0.0
 - 'SVC': 0.0
 - 'XGB': 0.029
+
 From here, we see that KNN was the best performing of these ensemble models. We then used a coarse walkforward cross validation, where we manually split the data into 5 folds:
 - Fold 0: training years 1971--1977, validation years 1978--1979,
 - Fold 1: training years 1971--1985, validation years 1986--1987,
