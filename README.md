@@ -37,7 +37,35 @@ pip install beautifulsoup4
 conda install beautifulsoup4
 ```
 
-The full list of packages and dependencies are further described in the ```environment.yml``` file.
+The full list of packages and dependencies are further described in the ```environment.yml``` file. Run
+```
+conda create --file environment.yml
+```
+to initialize the correct conda environment with all the dependencies.
+
+### Repository structure
+```python
+summer26-nomination-worthy-books/
+├── documents/
+│   ├── graphics/ # charts/figures for documents
+├── graphics/ # charts and figures for README.md
+├── results/
+├── src/
+│   ├── data/ # contains both raw data and cleaned/feature engineered data
+│   │   ├── raw/
+│   ├── exploratory-data-analysis/
+│   │   ├── baseline_tests/
+│   │   ├── sentence_encoding/ # code/notebooks for encoding the book synopsis using pretrained transformer
+│   ├── models/ 
+│   │   ├── trained_models/
+│   └── scripts/
+│       ├── data_cleaning/
+│       ├── data_gathering/
+│       └── feature_engineering/
+│           └── tagging_system/ # code/notebooks for encoding the tags and computing similarity with book synopses
+├── environment.yml 
+└── README.md
+```
 
 ### Stakeholders and KPIs
 Our main stakeholders are publishers, editors, authors, booksellers, libraries, SFF readers and award communities. These groups can use the project to identify promising new SFF novels, understand the factors linked to award nominations, and improve marketing decisions. 

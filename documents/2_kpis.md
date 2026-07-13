@@ -2,7 +2,7 @@
 
 When we look at our data, the first thing we notice is that we have a massive class imbalance, as shown in the graphs below.
 
-<img src="graphics/books_per_year.png" width=500 height=400> <img src="graphics/percent_nominees.png" width=500 height=400>
+<img src="../graphics/books_per_year.png" width=500 height=400> <img src="../graphics/percent_nominees.png" width=500 height=400>
 
 This means that if we just predict every book to not be a nominee, we would get >0.9 accuracy score. Additionally, we will need to choose classification models that are less sensitive to such massive class imbalances. 
 
